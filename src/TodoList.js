@@ -16,18 +16,23 @@ export function TodoList(props) {
     }
 
     function addNewTask(title) {
-        const newTasks = cloneArray(tasks);
-        newTasks.push({ key: tasks.length, title });
-        setTasks(newTasks);
+        setTasks([...tasks, { key: tasks.length, title }]);
     }
+
+    function editTask(taskIndex, newTitle) {
+        const updatedTasks = cloneArray(tasks);
+        updatedTasks[taskIndex] = { key: taskIndex, title: newTitle };
+        setTasks(updatedTasks);
+    }
+
 
     return (
         <div className="col-sm-4 offset-sm-4">
             <div className="col-sm-12 mb-1">
-                <TaskForm onSubmit={(title) => addNewTask(title)} />
+                <TaskForm onSubmit={addNewTask} />
             </div>
             <div className="col-sm-12">
-                <TaskList tasks={tasks} onRemoveTask={(i) => removeTask(i)} />
+                <TaskList tasks={tasks} onRemoveTask={removeTask} onEdit={editTask} />
             </div>
         </div>
     )

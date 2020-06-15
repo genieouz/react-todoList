@@ -6,15 +6,13 @@ import { Task } from './Task';
  * @param {{
  * tasks: [{ key: number; title: string; }]
  * onRemoveTask: Function
+ * onEdit: Function
  * }} props 
  */
-export function TaskList({ tasks, onRemoveTask }) {
-    const tasksDOMElements = [];
-    for (let i = tasks.length - 1; i >= 0; i--) {
-        tasksDOMElements.push(
-            <ul className="list-group" key={tasks[i].key}>
-                <Task task={tasks[i]} onClickDelete={() => onRemoveTask(i)} />
-            </ul>)
-    }
-    return tasksDOMElements;
+export function TaskList({ tasks, onRemoveTask, onEdit }) {
+    return tasks.map((task, i) => {
+        return (<ul className="list-group" key={task.key}>
+            <Task task={task} onClickDelete={() => onRemoveTask(i)} onEdit={onEdit} />
+        </ul>);
+    });
 }

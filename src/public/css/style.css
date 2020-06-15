@@ -4,3 +4,8 @@
 body {
     padding-top: 3%;
 }
+
+.create-task-button {
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+}
