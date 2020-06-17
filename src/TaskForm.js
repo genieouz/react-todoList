@@ -1,4 +1,39 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
+
+const useInput = (defaultValue = '') => {
+    const [value, setValue] = useState(defaultValue)
+    return {
+        value,
+        setValue,
+        clear: () => { setValue('') }
+    }
+}
+
+const Input = ({ value, setValue, clear, ...props }) => {
+    const input = React.createRef();
+    useEffect(() => {
+        input.current.focus();
+    });
+    return (
+        <input
+            ref={input}
+            value={value}
+            onChange={e => {
+                setValue(e.target.value)
+            }}
+            type="text"
+            className="form-control"
+            {...props}
+        />
+    )
+}
+
+/*
+ * 1) Bouton sauvegarder -> beforeunload si pas enregistré
+ * 2) monter/descendre les taches
+ * 3) focus sur le input quand on clique sur modifier
+ */
+
 
 /**
  *
@@ -10,7 +45,9 @@ import React from 'react';
  * }} props
  */
 export function TaskForm({ task, onSubmit, onFinalizeEdition, onEdit }) {
-    let inputId = task ? task.key : 'create-task-input';
+
+    const myInput = useInput(task ? task.title : "");
+
 
     function handleKeyDown(event) {
         if (event.key === 'Enter') {
@@ -19,21 +56,24 @@ export function TaskForm({ task, onSubmit, onFinalizeEdition, onEdit }) {
     }
 
     function submitForm() {
-        const taskInput = document.getElementById(inputId);
-        const title = taskInput.value;
-        if (!task) {
-            onSubmit(title);
-        } else {
-            onEdit(task.key, title);
+
+        if (task) {
+            onEdit(task.key, myInput.value);
             onFinalizeEdition();
+        } else {
+            onSubmit(myInput.value)
+            myInput.clear()
         }
-        taskInput.value = "";
     }
 
     return (
         <div>
             <div className="input-group">
-                <input type="text" className="form-control" id={inputId} defaultValue={task ? task.title : ""} placeholder="Entrer le titre de la tache puis appuyer sur Entrer" onKeyUp={handleKeyDown} />
+
+                <Input
+                    {...myInput}
+                    placeholder="Entrer le titre de la tache puis appuyer sur Entrer" onKeyUp={handleKeyDown} />
+
                 <button className="btn btn-success create-task-button" onClick={submitForm}>OK</button>
             </div>
         </div>

@@ -7,9 +7,11 @@ import { TaskForm } from './TaskForm';
  * task: { key: number; title: string; }
  * onClickDelete: Function
  * onEdit: Function
+ * moveDown: Function
+ * moveUp: Function
  * }} props
  */
-export function Task({ task, onClickDelete, onEdit }) {
+export function Task({ task, onClickDelete, onEdit, moveUp, moveDown }) {
     const [editMode, setEditMode] = useState(false)
     return (
         !editMode
@@ -19,6 +21,8 @@ export function Task({ task, onClickDelete, onEdit }) {
                 <div className="btn-toolbar float-right">
                     <button className="fa fa-edit btn btn-primary" onClick={() => setEditMode(true)}></button>
                     <button className="fa fa-trash btn btn-danger" onClick={() => onClickDelete()}></button>
+                    <button className="fa fa-arrow-up" onClick={moveUp}></button>
+                    <button className="fa fa-arrow-down" onClick={moveDown}></button>
                 </div>
             </li>
             :
