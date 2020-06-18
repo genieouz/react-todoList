@@ -12,7 +12,7 @@ export function TodoList(props) {
     const storage = useStorage(tasks, setTasks);
 
     return (
-        <div className="col-sm-4 offset-sm-4">
+        <div className="col-sm-12 col-md-4 offset-md-4">
             <div className="col-sm-12">
                 <div className="card card-body bg-light mb-3">
                     <button className="btn btn-primary" onClick={storage.recordTodoList}>Enregistrer la liste</button>

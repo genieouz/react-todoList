@@ -44,6 +44,14 @@ export function Task({ task }) {
         setTasks(tasksLeft);
     }
 
+    const Badge = ({ important }) => {
+        if (important) {
+            return <span className="badge badge-danger">Important</span>;
+        } else {
+            return <span className="badge badge-primary">Pas important</span>;
+        }
+    }
+
     return (
         !editMode
             ?
@@ -51,18 +59,16 @@ export function Task({ task }) {
                 <div className="row">
                     <div className="col-sm-8">
                         {task.title}
-                        <div className="btn-toolbar float-right">
-                            <button className="fa fa-edit btn btn-primary" onClick={() => setEditMode(true)}></button>
-                            <button className="fa fa-trash btn btn-danger" onClick={removeTask}></button>
-                            <button className="fa fa-arrow-up" onClick={moveUp}></button>
-                            <button className="fa fa-arrow-down" onClick={moveDown}></button>
+                        <div className="float-right">
+                            <Badge important={task.important} />
                         </div>
+
                     </div>
-                    <div className="col-sm-4">
-                        <select className="form-control">
-                            <option value={true}>Important</option>
-                            <option value={false}>Pas important</option>
-                        </select>
+                    <div className="btn-toolbar col-sm-4">
+                        <button className="fa fa-edit btn btn-primary" onClick={() => setEditMode(true)}></button>
+                        <button className="fa fa-trash btn btn-danger" onClick={removeTask}></button>
+                        <button className="fa fa-arrow-up" onClick={moveUp}></button>
+                        <button className="fa fa-arrow-down" onClick={moveDown}></button>
                     </div>
                 </div>
             </li>

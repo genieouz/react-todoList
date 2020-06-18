@@ -11,13 +11,8 @@ export function useStorage(value, setter) {
     }
 
     const storageIsDifferent = useMemo(() => {
-
-        const storageHasDifferentData = () => {
-            const recordedValue = getValueFromStorage(recordedListKeyName);
-            return recordedValue && recordedValue.length && !compareObject(recordedValue, value);
-        }
-        return storageHasDifferentData()
-
+        const recordedValue = getValueFromStorage(recordedListKeyName);
+        return recordedValue && recordedValue.length && !compareObject(recordedValue, value);
     }, [value]);
 
     useEffect(() => {
