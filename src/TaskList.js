@@ -11,11 +11,11 @@ import { Task } from './Task';
  * moveUp: Function
  * }} props 
  */
-export function TaskList({ tasks, onRemoveTask, onEdit, moveUp, moveDown }) {
+export function TaskList({ tasks }) {
+
     return tasks.map((task, i) => {
-        console.log('key ', task.key)
         return (<ul className="list-group" key={task.key}>
-            <Task moveUp={() => moveUp(i)} moveDown={() => moveDown(i)} task={task} onClickDelete={() => onRemoveTask(i)} onEdit={onEdit} />
+            <Task task={task} />
         </ul>);
     });
 }

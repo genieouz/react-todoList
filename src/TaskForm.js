@@ -1,4 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef, useContext } from 'react';
+import { tasksContext } from './TodoList';
+import { cloneArray } from './utils';
 
 const useInput = (defaultValue = '') => {
     const [value, setValue] = useState(defaultValue)
@@ -10,10 +12,10 @@ const useInput = (defaultValue = '') => {
 }
 
 const Input = ({ value, setValue, clear, ...props }) => {
-    const input = React.createRef();
+    const input = useRef();
     useEffect(() => {
         input.current.focus();
-    });
+    }, []);
     return (
         <input
             ref={input}
@@ -28,13 +30,6 @@ const Input = ({ value, setValue, clear, ...props }) => {
     )
 }
 
-/*
- * 1) Bouton sauvegarder -> beforeunload si pas enregistré
- * 2) monter/descendre les taches
- * 3) focus sur le input quand on clique sur modifier
- */
-
-
 /**
  *
  * @param {{
@@ -44,10 +39,10 @@ const Input = ({ value, setValue, clear, ...props }) => {
  * onFinalizeEdition: Function
  * }} props
  */
-export function TaskForm({ task, onSubmit, onFinalizeEdition, onEdit }) {
+function TaskForm({ task, onFinalizeEdition }) {
 
     const myInput = useInput(task ? task.title : "");
-
+    const { tasks, setTasks } = useContext(tasksContext);
 
     function handleKeyDown(event) {
         if (event.key === 'Enter') {
@@ -58,12 +53,23 @@ export function TaskForm({ task, onSubmit, onFinalizeEdition, onEdit }) {
     function submitForm() {
 
         if (task) {
-            onEdit(task.key, myInput.value);
+            editTask(task.key, myInput.value);
             onFinalizeEdition();
         } else {
-            onSubmit(myInput.value)
+            addNewTask(myInput.value)
             myInput.clear()
         }
+    }
+
+    function addNewTask(title) {
+        setTasks([...tasks, { key: tasks.length, title }]);
+    }
+
+    function editTask(taskKey, newTitle) {
+        const updatedTasks = cloneArray(tasks);
+        const taskIndex = updatedTasks.findIndex((task) => taskKey === task.key)
+        updatedTasks[taskIndex] = { key: taskKey, title: newTitle };
+        setTasks(updatedTasks);
     }
 
     return (
@@ -79,3 +85,5 @@ export function TaskForm({ task, onSubmit, onFinalizeEdition, onEdit }) {
         </div>
     );
 }
+
+export default TaskForm
